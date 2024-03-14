@@ -1,3 +1,51 @@
+Ownership, Borrowing, and Lifetimes
+
+Copy Types: Types with a fixed size known at compile time that are implicitly copied when assigned or passed as arguments. Examples: integers, booleans, char.
+RAII (Resource Acquisition is Initialization): A programming idiom where resources are tied to the lifetime of objects. Resource cleanup happens automatically when objects go out of scope.
+References: Non-owning pointers to values. Denoted by &. Comes in two flavors:
+Shared References (&T): Allow multiple read-only accesses.
+Mutable References (&mut T): Allow a single, exclusive access for modification.
+Lifetime Specifiers: Used to tell the compiler the relationships between references to ensure memory safety at compile time. Denoted by 'a, 'b, etc.
+Data Types and Structures
+
+Primitive Types: Basic built-in types like integers (i32, u64), floating-point numbers (f32, f64), Booleans (bool), and characters (char).
+Tuple: A fixed-size collection of values that can be of different types.
+Struct: A custom data type that groups related fields together.
+Enum: A data type with a fixed set of possible variants.
+Option (Option<T>): An enum used to represent the presence (Some(T)) or absence (None) of a value.
+Result (Result<T, E>): An enum used for error handling, representing either successful computation (Ok(T)) or an error (Err(E)).
+Control Flow
+
+if/else if/else: Conditional branching.
+match: Pattern matching for flexible control flow based on the shape of data.
+loop: Unconditional, infinite loop.
+while: Loop that executes as long as a condition is true.
+for: Loop used for iterating over sequences (like arrays, vectors, ranges).
+Functions and Modules
+
+Closures: Anonymous functions that capture variables from their environment.
+Higher-Order Functions: Functions that take other functions as arguments or return functions.
+impl blocks: Used to define methods (functions associated with a struct, enum, or trait)
+Modules: Used to organize code into logical units and control visibility. Denoted by the mod keyword.
+use statement: Brings external code elements (modules, functions, types, etc.) into scope.
+Collections
+
+Vector (Vec<T>): A dynamically resizable array.
+HashMap (HashMap<K, V>): A key-value data structure providing fast lookups by key.
+BTreeMap (BTreeMap<K, V>): A sorted key-value map, where keys are kept in order.
+String: A growable, UTF-8 encoded text data type.
+&str (string slice): A reference to a portion of a String.
+Concurrency
+
+Threads: Independent units of execution within a process.
+Channels: Mechanisms for communication and synchronization between threads (using std::sync::mpsc).
+Mutex (std::sync::Mutex): Provides exclusive, mutable access to shared data across threads.
+Advanced Concepts
+
+Generics: Allow writing code that works with multiple types.
+Macros: Metaprogramming facilities to extend the syntax of Rust.
+Unsafe Rust: Code blocks within which some of Rust's usual guarantees can be relaxed for performance or low-level control. 
+
 # Quick Reference
 
 ## Glossary
@@ -8,7 +56,7 @@
 * Lifetime: A mechanism that ensures references remain valid and prevents dangling pointers.
 * Move: Transferring ownership of a value.
 * Ownership: The principle that a value in Rust can only have one owner at a time.
-* Trait: A definition of shared behavior that types can implement.
+* Trait: A definition of shared behaviour that types can implement.
 
 ## Syntax Basics
 
