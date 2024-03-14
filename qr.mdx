@@ -1,0 +1,114 @@
+# Quick Reference
+
+## Glossary
+
+* Borrowing: Temporarily taking a reference to a value without taking ownership.
+* Cargo: Rust's build system and package manager.
+* crate: A module or a library in Rust.
+* Lifetime: A mechanism that ensures references remain valid and prevents dangling pointers.
+* Move: Transferring ownership of a value.
+* Ownership: The principle that a value in Rust can only have one owner at a time.
+* Trait: A definition of shared behavior that types can implement.
+
+## Syntax Basics
+
+### Variables
+
+``` let x = 5;        // Immutable variable
+let mut y = 10;   // Mutable variable
+``` 
+
+
+### Functions:
+
+```fn add(x: i32, y: i32) -> i32 {
+    x + y
+}
+```
+
+### Structs:
+
+```struct Point {
+    x: i32,
+    y: i32,
+}
+```
+
+### Enums:
+
+```enum Color {
+    Red,
+    Green,
+    Blue,
+}
+```
+
+## Control Flow
+
+### if/else:
+
+```if x > 10 {
+   // ...
+} else {
+   // ...
+}
+```
+
+### Loops:
+
+```for i in 0..10 {  // Range loop
+    // ...   
+}
+
+let mut x = 5;
+while x > 0 {     // Conditional loop
+    // ...
+    x -= 1;
+}
+```
+
+## Ownership and Borrowing
+
+```let s1 = String::from("hello"); 
+let s2 = s1;  // Ownership of 's1' moved to 's2', 's1' is no longer usable
+
+fn calculate_length(s: &String) -> usize { // Borrowing using reference (&)
+    s.len()
+} 
+```
+## Collections
+
+### Vectors:
+
+```let mut v = vec![1, 2, 3];  
+v.push(4);
+```
+
+### HashMap:
+
+```use std::collections::HashMap;
+
+let mut scores = HashMap::new();
+scores.insert("Alice", 10);
+```
+
+## Traits
+
+```trait Printable {
+    fn print(&self);
+}
+
+struct Book { /* ... */ }
+
+impl Printable for Book {
+    fn print(&self) {
+        println!("Book details..."); 
+    }
+}
+```
+
+# Useful Resources
+
+The Rust Book: (https://doc.rust-lang.org/book/)
+Rust By Example: (https://doc.rust-lang.org/rust-by-example/)
+Rust Playground: (https://play.rust-lang.org/)
