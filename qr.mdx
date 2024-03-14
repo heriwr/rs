@@ -58,6 +58,36 @@ Unsafe Rust: Code blocks within which some of Rust's usual guarantees can be rel
 * Ownership: The principle that a value in Rust can only have one owner at a time.
 * Trait: A definition of shared behaviour that types can implement.
 
+## Symbols
+
+| Symbol | Explanation                                                  | Example                                                        |
+| ------ | ------------------------------------------------------------ | -------------------------------------------------------------- |
+| `%`    | Modulo operator (computes the remainder of a division)       | `let remainder = 17 % 5; // remainder will be 2`              |
+| `@`    | Used in `match` patterns for binding values and adding guards | `match x @ 0..=10 if x % 2 == 0 => {}`                        |
+| `+`    | Addition or string concatenation                             | `let sum = 5 + 3;`                                             |
+| `-`    | Subtraction or negation                                      | `let difference = 10 - 4;`                                     |
+| `*`    | Multiplication                                               | `let product = 6 * 7;`                                          |
+| `/`    | Division                                                     | `let quotient = 20 / 4;`                                        |
+| `&`    | Bitwise AND or borrow a reference                            | `let x = 5 & 3;` <br/> `let ref_y = &y; `                    |
+| `|`    | Bitwise OR or inclusive range pattern                        | `let x = 5 | 3;` <br/> `match x { 1..=10 => {} }`              |
+| `^`    | Bitwise XOR                                                  | `let x = 5 ^ 3;`                                               |
+| `!`    | Logical NOT or macro invocation                              | `let x = !true;` <br/> `println!("Hello {}", name!());`         |
+| `==`   | Equality comparison                                          | `if x == 5 {}`                                                 |
+| `!=`   | Inequality comparison                                        | `if y != 10 {}`                                                |
+| `<`    | Less than comparison                                         | `if z < 20 {}`                                                 |
+| `>`    | Greater than comparison                                      | `if w > 0 {}`                                                  |
+| `<=`   | Less than or equal to comparison                             | `if v <= 100 {}`                                               |
+| `>=`   | Greater than or equal to comparison                          | `if u >= 5 {}`                                                 |
+| `=`    | Assignment                                                   | `let a = 10;`                                                  |
+| `+=`   | Addition assignment                                          | `let mut b = 5; b += 3;`                                       |
+| `-=`   | Subtraction assignment                                       | `let mut c = 8; c -= 2;`                                       |
+| `*=`   | Multiplication assignment                                    | `let mut d = 2; d *= 5;`                                       |
+| `/=`   | Division assignment                                          | `let mut e = 10; e /= 2;`                                      |
+| `.`    | Access struct/enum members or call methods                   | `person.name` <br/> `my_vec.push(5);`                         | 
+| `..`   | Exclusive range pattern                                      | `match x { 1..5 => {} }`                                       |
+| `..=`  | Inclusive range pattern                                      | `match y { 1..=10 => {} }`                                     | 
+
+
 ## Syntax Basics
 
 ### Variables
