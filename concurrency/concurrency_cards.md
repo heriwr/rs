@@ -50,7 +50,7 @@ fn main() {
   * When ownership rules are inconvenient for simple mutations.
   * Within structs to enable mutability of specific fields.
  
- > **Important:** `Cell doesn't enforce Rust's usual borrowing rules, so it's up to you to ensure safety.
+ > **Important:** `Cell` doesn't enforce Rust's usual borrowing rules, so it's up to you to ensure safety.
 
 **Example:**
 
