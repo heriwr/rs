@@ -2,9 +2,7 @@
 Flashcard Deck: Rust Concurrency
 ---
 
-## What is?
-
-### What is a `Mutex`?
+## What is a `Mutex`?
 
 ---
 A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It guarantees that only one thread can access and modify a shared resource at a time, preventing chaotic **data races** and preserving data integrity. 
@@ -13,7 +11,7 @@ A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It gua
 
 . . .
 
-### What is a `Cell`?
+## What is a `Cell`?
 
 ---
 
@@ -21,7 +19,7 @@ A `Cell` allows you to get and set values within an immutable type, even if you 
 
 . . .
 
-What is a `RefCell`?
+## What is a `RefCell`?
 
 ---
 
@@ -31,7 +29,7 @@ A `RefCell` is similar to `Cell`, but enforces borrowing rules at runtime.
 
 . . .
 
-What is a `RwLock`?
+## What is a `RwLock`?
 
 ---
 
@@ -41,7 +39,16 @@ What is a `RwLock`?
 
 . . .
 
-How does a `Mutex` work?
+## What is the difference between a 'Send' and a 'Sync' Type?
+
+---
+
+* **Send:** A type is 'Send' if it's safe to transfer ownership between threads. Primitive types like integers, as well as many standard library types, implement Send.
+* **Sync:** A type is 'Sync' if it's safe to share a reference (&T) between threads. Types composed entirely of 'Send' types are usually 'Sync'.
+
+. . .
+
+## How does a `Mutex` work?
 
 ---
 
@@ -51,9 +58,29 @@ How does a `Mutex` work?
 
 > A thread tries to get the lock; if it succeeds, it has exclusive access. Crucially, if another thread tries to acquire the same lock while it's held by another, it will be blocked (put to sleep) until the lock is released.
 
+```
+use std::sync::Mutex;
+use std::thread;
+
+let counter = Mutex::new(0);
+
+let threads = (0..10).map(|_| {
+    thread::spawn(move || {
+        let mut num = counter.lock().unwrap();
+        *num += 1;
+    })
+}).collect::<Vec<_>>();
+
+for thread in threads {
+    thread.join().unwrap();
+}
+
+println!("Final counter value: {}", counter.lock().unwrap());
+```
+
 . . .
 
-Why use a `Mutex`?
+## Why use a `Mutex`?
 
 ---
 
@@ -64,7 +91,7 @@ Why use a `Mutex`?
 
 . . .
 
-What is **Mutex Poisoning**?
+## What is **Mutex Poisoning**?
 
 ---
 
@@ -75,7 +102,7 @@ What is **Mutex Poisoning**?
 
 . . .
 
-What is ```mpsc```?
+## What is ```mpsc```?
 
 ---
 
@@ -86,13 +113,14 @@ What is ```mpsc```?
 
 . . .
 
-How do you create new threads in Rust?
+## How do you create new threads in Rust?
 
 ---
 
 You use the `std::thread::spawn` function to create a new thread. You give it a closure (a function-like block of code) that defines the work the thread will do.
 
-```use std::thread;
+```
+use std::thread;
 use std::time::Duration;
 
 fn main() {
@@ -109,7 +137,7 @@ fn main() {
 
 . . .
 
-Describe a static item in Rust.
+## Describe a static item in Rust.
 
 ---
 
@@ -119,7 +147,7 @@ Describe a static item in Rust.
 
 . . .
 
-What is `std::sync::Arc` in Rust?
+## What is `std::sync::Arc` in Rust?
 
 ---
 
@@ -129,7 +157,7 @@ What is `std::sync::Arc` in Rust?
 
 . . .
 
-Why are "shared" and "exclusive" more accurate terms than "immutable" and "mutable" when describing Rust references?
+## Why are "shared" and "exclusive" more accurate terms than "immutable" and "mutable" when describing Rust references?
 
 ---
 
