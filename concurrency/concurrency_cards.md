@@ -166,3 +166,61 @@ fn main() {
 
 * **"Shared"** (`&T`) emphasises that multiple references to the same data can exist simultaneously.
 * **"Exclusive"** (`&mut T`) highlights the guarantee that no other reference can access the data while the exclusive reference is in use, allowing modification.
+
+. . .
+
+## What is a condition variable in Rust, and why would you use one?
+
+---
+
+A **condition variable** (Condvar) provides a mechanism for threads to signal each other when a particular condition becomes true.
+
+> It's typically used in conjunction with a `mutex` to protect shared data.
+
+**Use Cases:**
+* Producer-consumer scenarios (one thread produces data, another consumes it).
+* Implementing barriers (waiting for multiple threads to reach a point.)
+
+```
+use std::sync::{Arc, Mutex, Condvar};
+use std::thread;
+
+// Shared data between threads
+let pair = Arc::new((Mutex::new(false), Condvar::new())); 
+let pair2 = pair.clone();
+
+thread::spawn(move || {
+    let (lock, cvar) = &*pair2;
+    let mut started = lock.lock().unwrap();
+    *started = true;
+    println!("Notifying waiting thread...");
+    cvar.notify_one(); 
+});
+
+let (lock, cvar) = &*pair;
+let mut started = lock.lock().unwrap();
+while !*started {
+    println!("Waiting for the start signal...");
+    started = cvar.wait(started).unwrap(); 
+}
+println!("Received start signal!");
+```
+
+. . .
+
+## Describe the mechanism of waiting and notfication with a condition variable (condvar).
+
+---
+
+* **Waiting:**
+  1. A thread aquires a mutex lock.
+  2. While the desired condition is not met, the thread calls `condvar.wait(mutex)`.
+     * This atomically releases the mutex and blocks the thread.
+* **Notification**
+  1. Another thread acquires the mutex lock.
+  2. It changes the shared data to signal the condition.
+  3. It calls `condvar.notify_one()` (wakes up one waiting thread) or `condvar.notify_all()` (wakes up all waiting threads).
+
+. . .
+ 
+## What is thread parking in Rust?
