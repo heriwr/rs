@@ -484,10 +484,15 @@ println!("Condition met!");
 
 . . .
  
-## What is thread parking in Rust?
+## What is thread parking in Rust, and why is it important?
 
-* Thread parking avoids "busy waiting", whee a thread continuously checks a condition in a loop, wasting CPU cycles.
-* Instead, the thread parks itself until the condition is met and signaled by another thread, thus conserving resources.
+* **Thread Parking:** A mechanism for temporarily suspending a thread's execution until a specific condition is met.
+* **Why it matters:**
+    * **Avoids Busy-Waiting:** Prevents threads from continuously consuming CPU cycles while waiting, improving efficiency.
+    * **Conserves Resources:** Allows the CPU to be used for other tasks while the thread is parked.
+* **Key Functions:**
+    * `std::thread::park()` to park the current thread.
+    * `std::thread::Thread::unpark()` to wake a parked thread.
 
 . . .
 
@@ -495,36 +500,109 @@ println!("Condition met!");
 
 ---
 
-A deadlock occurs when two or more threads are stuck forever, each waiting for a resource held by the other. This leads to program freeze.
-
-> Think of a traffic jam at a 4-way intersection where everyone's trying to go first, and no one can move.
+* **Deadlock:** A situation where two or more threads are permanently blocked, each waiting for a resource held by the other.
+* **Consequence:** The affected parts of the program freeze.
+* **Analogy:** A gridlocked intersection where cars block each other from moving.
+* **Prevention:** Careful design and use of synchronization mechanisms are critical to avoiding deadlocks.
 
 . . .
 
-## How does a livelock differ from a deadlock?
+## What's the difference between deadlock and livelock in concurrent programming?
 
-* **Livelock:** Threads are still active, constantly changing state in response to each other, but without any real progress.
-* **Deadlock:** Threads are completely frozen, each blocked on the other's resource.
+* **Deadlock:**
 
-> Imagine two people constantly apologising and trying to let the other pass through a doorway - they move around, but no one gets through.
+    * **Complete standstill:** Threads are blocked, unable to proceed.
+    * **Frozen:** No state changes occur.
+* **Livelock**
 
-## Define atomicity in the context of concurrency.
+    * **Deception of activity:** Threads constantly change state, appearing busy.
+    * **No progress:** Despite the activity, the overall task remains incomplete.
+**Analogy**
 
----
+* Picture two people repeatedly apologizing and sidestepping in a doorway. They are active but achieve nothing.
 
-Atomicity guarantees that a set of operations appears to happen either completely or not at all. Other threads cannot see partial or intermediate states of operations.
-
-> Think of a database transaction; it should either fully succeed (e.g., transfer money) or fully fail, leaving the accounts unaltered.
-
-## Name two synchronisation primitives beyond mutexes.
-
-* **Semaphores:** Control access to a limited number of resources (like a fixed pool or parking spaces).
-* **Conditional Variables:** Allow threads to wait until a specific condition becomes true (like waiting for a queue to have items before consuming).
-
-## What is the advantage of lock-free or wait-free programming?
+## What does atomicity mean in concurrent programming?
 
 ---
 
-* **Performance:** In high contention scenarios, they can be faster than traditional locking techniques.
-* **Avoidance of deadlocks/livelocks:** Carefully designed algorithms ensure progress.
-* **Downside:** Increased complexity, making these techniques harder to implement correctly.
+* **Atomicity:** Ensures that a group of operations executes as an indivisible unit.
+* **Key point:** From the perspective of other threads, the operations either all happen successfully or none of them do.
+* **Analogy:** Think of a database transaction: it either fully commits or rolls back entirely, preventing inconsistent intermediate states.
+
+## What are synchronization primitives, and name several examples beyond mutexes.
+
+**Synchronization Primitives: **Mechanisms that coordinate the actions of concurrent threads, ensuring safe access to shared data.
+**Examples:**
+* **Semaphores:** Manage access to a limited pool of resources.
+* **Conditional Variables:** Enable threads to wait for specific conditions.
+* **Barriers:** Synchronize a group of threads to reach a common point.
+* **Read-Write Locks (`RwLock`):** Allow finer-grained access (multiple readers or a single writer).
+* **Channels:** Provide structured communication pipelines between threads.
+
+## What is a semaphore in concurrent programming?
+
+---
+
+**Semaphore:** A signaling mechanism that manages access to shared resources. Think of it as a bouncer at a club with a limited capacity.
+**Key Operations:**
+    * **Wait (acquire):** Threads try to enter. If the limit is reached, they wait.
+    * **Signal (release):** Threads leave, allowing others to enter.
+
+**Code Example**
+
+```
+use std::sync::Semaphore;
+use std::thread;
+
+const MAX_CONNECTIONS: usize = 5;
+
+let semaphore = Semaphore::new(MAX_CONNECTIONS);
+
+for _ in 0..10 {
+    thread::spawn(move || {
+        // Attempt to acquire a "slot"
+        semaphore.acquire();
+
+        // Access the shared resource (e.g., database connection)
+        println!("Thread acquired a connection");
+
+        // ... Do work ...
+
+        // Release the "slot" for others
+        semaphore.release();
+    });
+}
+```
+
+**Code Breakdown**
+
+1. **Setup:**
+
+    * `MAX_CONNECTIONS`: Defines the maximum simultaneous connections allowed.
+    * `semaphore = Semaphore::new(MAX_CONNECTIONS)`: Creates the semaphore, initialized with the limit.
+2. **Threads:**
+
+    * A loop spawns 10 threads, each representing a task that needs the shared resource.
+3. `semaphore.acquire()`:
+
+    * Each thread tries to acquire the semaphore.
+    * If the internal count is greater than zero (a "slot" is open), the count is decremented, and the thread proceeds.
+    * If the count is zero, the thread blocks until another thread releases.
+4. **Critical Section:**
+
+    * The code after `acquire()` represents the section where the thread uses the shared resource.
+5. `semaphore.release()`:
+
+    * Once a thread is done, it releases the semaphore, incrementing the count and potentially waking a waiting thread.
+
+> Key Point: The semaphore ensures that only a maximum of `MAX_CONNECTIONS` threads can access the shared resource simultaneously, preventing data corruption or resource exhaustion.
+
+## What are the key advantages of lock-free or wait-free programming, and what's the catch?
+
+---
+
+* **Advantages:**
+    * **Potential Performance Gains:** Can outperform locks in highly contended scenarios.
+    * **No Deadlocks/Livelocks:** Guarantees progress by design (wait-free being the stronger guarantee).
+* **The Catch:**
+    * **Complexity:** Significantly harder to design and reason about compared to lock-based approaches.
