@@ -41,11 +41,48 @@ fn main() {
 5. **Lock Released**: The lock is automatically released when num goes out of scope at the end of the thread or main function block.
 . . .
 
-## What is a `Cell`?
+## What is a `Cell` in Rust, and why would you use it?
 
 ---
 
-A `Cell` allows you to get and set values within an immutable type, even if you don't own the data. It tracks mutability at runtime.
+* `Cell` provides **interior mutability:** It allows you to modify the conents of a value even when the value itself is declared immutable.
+* Use cases:
+  * When ownership rules are inconvenient for simple mutations.
+  * Within structs to enable mutability of specific fields.
+ 
+ > **Important:** `Cell doesn't enforce Rust's usual borrowing rules, so it's up to you to ensure safety.
+
+**Example:**
+
+```
+use std::cell::Cell;
+
+fn main() {
+    // A counter that we want to increment, even though it's 'immutable'
+    let counter = Cell::new(0); 
+
+    // Increment the counter several times
+    for _ in 0..5 {
+        let current_value = counter.get();
+        counter.set(current_value + 1);
+    }
+
+    println!("Final counter value: {}", counter.get());
+}
+```
+
+**Explanation:**
+
+1. `Cell::new(0)`: We create a new `Cell` containing the initial counter value of 0.
+2. **Immutable** `counter`: Notice that the counter variable itself would normally be immutable if it weren't for `Cell`.
+3. `counter.get()`: Retrieves the current value stored within the `Cell`.
+4. `counter.set(...)`: Updates the value inside the `Cell`.
+
+**Key Points:**
+
+* Without `Cell`, you wouldn't be able to modify counter after its initial assignment.
+
+> `Cell` is useful for scenarios where you need flexibility, but understand the trade-off in terms of compile-time safety guarantees.
 
 . . .
 
