@@ -155,7 +155,8 @@ thread::spawn(move || {
 
 * **Mutex:** Offers compile-time safety guarantees for thread-safe access. Requires acquiring a lock, potentially leading to overhead if there's high contention.
 * **Cell:** Bypasses Rust's borrowing rules, allowing for mutation without exclusive ownership. The programmer is responsible for ensuring thread safety (e.g., using manual synchronization techniques if needed).
-Choosing Between Mutex and Cell:
+
+**Choosing Between `Mutex` and `Cell`:**
 
 * **Use Mutex:** When data races are a concern in multi-threaded scenarios and you need strong guarantees about data consistency.
 * **Use Cell:** For simple interior mutability within structs or when ownership rules are inconvenient for specific modifications, but be mindful of potential thread safety issues if not addressed carefully.
