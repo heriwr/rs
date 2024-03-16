@@ -2,7 +2,7 @@
 Flashcard Deck: Rust Concurrency
 ---
 
-## What is a `Mutex`? ##
+## What is a `Mutex`?
 
 ---
 A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It guarantees that only one thread can access and modify a shared resource at a time, preventing chaotic **data races** and preserving data integrity. 
@@ -224,3 +224,46 @@ println!("Received start signal!");
 . . .
  
 ## What is thread parking in Rust?
+
+* Thread parking avoids "busy waiting", whee a thread continuously checks a condition in a loop, wasting CPU cycles.
+* Instead, the thread parks itself until the condition is met and signaled by another thread, thus conserving resources.
+
+. . .
+
+## What is a deadlock in concurrent programming?
+
+---
+
+A deadlock occurs when two or more threads are stuck forever, each waiting for a resource held by the other. This leads to program freeze.
+
+> Think of a traffic jam at a 4-way intersection where everyone's trying to go first, and no one can move.
+
+. . .
+
+## How does a livelock differ from a deadlock?
+
+* **Livelock:** Threads are still active, constantly changing state in response to each other, but without any real progress.
+* **Deadlock:** Threads are completely frozen, each blocked on the other's resource.
+
+> Imagine two people constantly apologising and trying to let the other pass through a doorway - they move around, but no one gets through.
+
+## Define atomicity in the context of concurrency.
+
+---
+
+Atomicity guarantees that a set of operations appears to happen either completely or not at all. Other threads cannot see partial or intermediate states of operations.
+
+> Think of a database transaction; it should either fully succeed (e.g., transfer money) or fully fail, leaving the accounts unaltered.
+
+## Name two synchronisation primitives beyond mutexes.
+
+* **Semaphores:** Control access to a limited number of resources (like a fixed pool or parking spaces).
+* **Conditional Variables:** Allow threads to wait until a specific condition becomes true (like waiting for a queue to have items before consuming).
+
+## What is the advantage of lock-free or wait-free programming?
+
+---
+
+* **Performance:** In high contention scenarios, they can be faster than traditional locking techniques.
+* **Avoidance of deadlocks/livelocks:** Carefully designed algorithms ensure progress.
+* **Downside:** Increased complexity, making these techniques harder to implement correctly.
