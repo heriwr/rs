@@ -1,5 +1,5 @@
 ---
-Flashcard Deck: Concurrency
+Flashcard Deck: Rust Concurrency
 ---
 
 What is a ```Mutex```?
