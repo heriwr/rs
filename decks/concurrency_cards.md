@@ -18,7 +18,7 @@ use std::thread;
 
 fn main() {
     // Some shared data we need to protect
-    let data = Arc::new(Mutex::new(0)); 
+    let data = Arc::new(Mutex::new(0)); [^1]
 
     let data_clone = data.clone(); // Need a clone for the thread
 
