@@ -2,7 +2,7 @@
 Flashcard Deck: Rust Concurrency
 ---
 
-## What is a `Mutex`?
+## What is a `Mutex`? ##
 
 ---
 A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It guarantees that only one thread can access and modify a shared resource at a time, preventing chaotic **data races** and preserving data integrity. 
