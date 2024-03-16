@@ -43,8 +43,11 @@ A `RefCell` is similar to `Cell`, but enforces borrowing rules at runtime.
 
 ---
 
-* **Send:** A type is 'Send' if it's safe to transfer ownership between threads. Primitive types like integers, as well as many standard library types, implement Send.
-* **Sync:** A type is 'Sync' if it's safe to share a reference (&T) between threads. Types composed entirely of 'Send' types are usually 'Sync'.
+* **Send:** A type is 'Send' if it's safe to transfer ownership between threads.
+ > Primitive types like integers, as well as many standard library types, implement Send.
+ 
+* **Sync:** A type is 'Sync' if it's safe to share a reference (&T) between threads.
+ > Types composed entirely of 'Send' types are usually 'Sync'.
 
 . . .
 
