@@ -2,13 +2,41 @@
 Flashcard Deck: Rust Concurrency
 ---
 
-## What is a `Mutex`?
+## What is a `Mutex` and why is it important?
 
 ---
-A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It guarantees that only one thread can access and modify a shared resource at a time, preventing chaotic **data races** and preserving data integrity. 
+* A `Mutex` (short for mutual exclusion) is a synchronization mechanism that enforces exclusive access to shared data in multi-threaded environments.
+* Importance:
+  * Prevents **data races**: Ensures that only one thread can modify data at a time, maintaining consistency.
+* Rust's standard library provides the `Mutex` type.
 
-> Rust's Mutex type from the standard library provides this essential synchronization tool.
+```
+use std::sync::{Arc, Mutex};
+use std::thread;
 
+fn main() {
+    // Some shared data we need to protect
+    let data = Arc::new(Mutex::new(0)); 
+
+    let data_clone = data.clone(); // Need a clone for the thread
+
+    thread::spawn(move || {
+        let mut num = data_clone.lock().unwrap(); // Acquire the lock
+        *num += 1; // Modify the data
+    });
+
+    // Main thread can also modify the data
+    let mut num = data.lock().unwrap();
+    *num *= 10;
+
+    println!("Result: {}", num); 
+}
+```
+1. `Arc<Mutex<i32>>`: We wrap our counter (0) in a Mutex for thread safety and then put that in an Arc so it can be shared between threads.
+2. `data_clone`: We clone the Arc to pass into the new thread.
+3. `lock().unwrap()`: Acquires the lock on the Mutex. .unwrap() handles potential errors here, but proper code would manage them gracefully.
+4. **Modify Data**: Once the lock is acquired, we have exclusive access to the num inside.
+5. **Lock Released**: The lock is automatically released when num goes out of scope at the end of the thread or main function block.
 . . .
 
 ## What is a `Cell`?
