@@ -10,6 +10,8 @@ Flashcard Deck: Rust Concurrency
   * Prevents **data races**: Ensures that only one thread can modify data at a time, maintaining consistency.
 * Rust's standard library provides the `Mutex` type.
 
+Example:
+
 ```
 use std::sync::{Arc, Mutex};
 use std::thread;
