@@ -82,7 +82,7 @@ fn main() {
 
 * Without `Cell`, you wouldn't be able to modify counter after its initial assignment.
 
-> `Cell` is useful for scenarios where you need flexibility, but understand the trade-off in terms of compile-time safety guarantees.
+> **Important:** `Cell` is useful for scenarios where you need flexibility, but understand the trade-off in terms of compile-time safety guarantees.
 
 . . .
 
