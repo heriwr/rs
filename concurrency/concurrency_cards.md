@@ -86,6 +86,81 @@ fn main() {
 
 . . .
 
+## How do `Mutex` and `Cell` in Rust differ in how they handle mutability?
+
+---
+
+* `Mutex`:
+  * Enforces thread-safe exclusivity at compile time.
+  * Only one thread can modify the data at a time (requires acquiring a lock).
+  * Designed to prevent data races in multi-threaded scenarios.
+* `Cell`:
+  * Provides interior mutability at runtime.
+  * Modifying contents doesn't require exclusive ownership.
+  * Bypassess Rust's usual borrowing rules, putting safety responsibility on the programmer.
+
+**Example:**
+
+```
+use std::sync::{Mutex, Arc};
+use std::cell::Cell;
+use std::thread;
+
+// ---  Mutex Example ---
+let counter = Arc::new(Mutex::new(0));
+
+thread::spawn({
+    let counter = counter.clone();
+    let mut num = counter.lock().unwrap();
+    *num += 1; 
+});
+
+// --- Cell Example ---
+let counter = Cell::new(0);
+
+thread::spawn(move || {
+    let mut num = counter.get();
+    num += 1;
+    counter.set(num);
+});
+```
+
+**Explanation:**
+
+* **Mutex Example:**
+
+1. `Arc<Mutex<i32>>`:  We use `Arc` to create a shared reference to a `Mutex` containing our counter (initially 0).
+
+2. **Thread Creation:** We spawn a new thread with a closure that increments the counter.
+
+3. `counter.clone()`:  The closure needs its own copy (clone) of the Arc to access the counter in the other thread.
+
+4. `lock().unwrap()`: Inside the thread, the closure acquires the lock on the Mutex. This ensures exclusive access to the counter, preventing data races.
+
+5. `*num += 1`:  With the lock held, the value inside the Mutex is incremented.
+
+* **Cell Example**
+
+1. `Cell::new(0)`: Here, we create a `Cell` directly containing the counter value (0).
+
+2. **Thread Creation (Similar)**: We spawn a similar thread with a closure to modify the counter.
+
+3. `let mut num = counter.get();`: The closure retrieves the current value from the `Cell` using `get()`.
+
+4. `num += 1`:  The retrieved value is incremented outside of the `Cell`. `Cell` itself doesn't enforce exclusive access.
+
+5. `counter.set(num);`: Finally, the incremented value is explicitly set back into the `Cell` using `set()`.
+
+**Key Differences:**
+
+* **Mutex:** Offers compile-time safety guarantees for thread-safe access. Requires acquiring a lock, potentially leading to overhead if there's high contention.
+* **Cell:** Bypasses Rust's borrowing rules, allowing for mutation without exclusive ownership. The programmer is responsible for ensuring thread safety (e.g., using manual synchronization techniques if needed).
+Choosing Between Mutex and Cell:
+
+* **Use Mutex:** When data races are a concern in multi-threaded scenarios and you need strong guarantees about data consistency.
+* **Use Cell:* For simple interior mutability within structs or when ownership rules are inconvenient for specific modifications, but be mindful of potential thread safety issues if not addressed carefully.
+. . .
+
 ## What is a `RefCell`?
 
 ---
