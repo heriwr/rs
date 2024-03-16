@@ -45,7 +45,7 @@ fn main() {
 
 ---
 
-* `Cell` provides **interior mutability:** It allows you to modify the conents of a value even when the value itself is declared immutable.
+* `Cell` provides **interior mutability:** It allows you to modify the contents of a value even when the value itself is declared immutable.
 * Use cases:
   * When ownership rules are inconvenient for simple mutations.
   * Within structs to enable mutability of specific fields.
