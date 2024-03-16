@@ -52,3 +52,41 @@ What is ```mpsc```?
 **Multiple producer, single consumer.** 
 
 > For scenarios where several threads send data to one receiver.
+
+
+. . .
+
+How do you create new threads in Rust?
+
+---
+
+Use the `std::thread::spawn` function from the standard library.
+
+. . .
+
+Describe a static item in Rust.
+
+---
+
+* Has a constant initializer (value must be known at compile time).
+* Exists for the entire duration of the program's execution (never dropped).
+* Is ready to use even before the `main` function starts.
+
+. . .
+
+What is `std::sync::Arc` in Rust?
+
+---
+
+"Atomically reference counted" smart pointer.
+
+> Enables thread-safe owneership of shared data by tracking how many references to the data exist.
+
+. . .
+
+Why are "shared" and "exclusive" more accurate terms than "immutable" and "mutable" when describing Rust references?
+
+---
+
+* "Shared" (`&T`) emphasises that multiple references to the same data can exist simultaneously.
+* "Exclusive" (`&mut T) highlights the guarantee that no other reference can access the data while the exclusive reference is in use, allowing modification.
