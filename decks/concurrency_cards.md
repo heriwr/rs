@@ -460,60 +460,27 @@ println!("Condition met!");
 
     * Once the producer thread sets the condition, the consumer thread will be notified, exit the loop, and print "Condition met!".
   
-> Key Points:
+**Key Points:**
 
-> **Synchronization:** The `Mutex` ensures that only one thread accesses and modifies the `started` flag at a time.
-> **Efficient Waiting:** The `Condvar` allows the consumer thread to sleep until the condition is signaled, avoiding wasteful busy-waiting.
-
----
-
-A **condition variable** (Condvar) provides a mechanism for threads to signal each other when a particular condition becomes true.
-
-> It's typically used in conjunction with a `mutex` to protect shared data.
-
-**Use Cases:**
-* Producer-consumer scenarios (one thread produces data, another consumes it).
-* Implementing barriers (waiting for multiple threads to reach a point.)
-
-```
-use std::sync::{Arc, Mutex, Condvar};
-use std::thread;
-
-// Shared data between threads
-let pair = Arc::new((Mutex::new(false), Condvar::new())); 
-let pair2 = pair.clone();
-
-thread::spawn(move || {
-    let (lock, cvar) = &*pair2;
-    let mut started = lock.lock().unwrap();
-    *started = true;
-    println!("Notifying waiting thread...");
-    cvar.notify_one(); 
-});
-
-let (lock, cvar) = &*pair;
-let mut started = lock.lock().unwrap();
-while !*started {
-    println!("Waiting for the start signal...");
-    started = cvar.wait(started).unwrap(); 
-}
-println!("Received start signal!");
-```
+> * **Synchronization:** The `Mutex` ensures that only one thread accesses and modifies the `started` flag at a time.
+> * **Efficient Waiting:** The `Condvar` allows the consumer thread to sleep until the condition is signaled, avoiding wasteful busy-waiting.
 
 . . .
 
-## Describe the mechanism of waiting and notfication with a condition variable (condvar).
+## How do threads use a condition variable (condvar) to wait and signal in Rust?
 
 ---
 
-* **Waiting:**
-  1. A thread aquires a mutex lock.
-  2. While the desired condition is not met, the thread calls `condvar.wait(mutex)`.
-     * This atomically releases the mutex and blocks the thread.
-* **Notification**
-  1. Another thread acquires the mutex lock.
-  2. It changes the shared data to signal the condition.
-  3. It calls `condvar.notify_one()` (wakes up one waiting thread) or `condvar.notify_all()` (wakes up all waiting threads).
+**Waiting Thread:**
+
+1. **Acquire Lock:** Obtain the `Mutex` associated with the condition.
+2. **Check Condition:** If the condition isn't met yet:
+    * **Wait and Release:** Call `condvar.wait(mutex)` to atomically release the lock and go to sleep.
+**Signaling Thread:**
+
+1. **Acquire Lock:** Obtain the same `Mutex`.
+2. **Modify State:** Change the shared data so the condition becomes true.
+3. **Notify:** Call `condvar.notify_one()` (to wake one waiter) or `condvar.notify_all()` (to wake all waiters).
 
 . . .
  
