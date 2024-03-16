@@ -2,12 +2,42 @@
 Flashcard Deck: Rust Concurrency
 ---
 
+## What is?
+
 What is a `Mutex`?
 
 ---
 A `Mutex` (short for mutual exclusion) acts like a padlock for your data. It guarantees that only one thread can access and modify a shared resource at a time, preventing chaotic **data races** and preserving data integrity. 
 
 > Rust's Mutex type from the standard library provides this essential synchronization tool.
+
+. . .
+
+What is a `Cell`?
+
+---
+
+A `Cell` allows you to get and set values within an immutable type, even if you don't own the data. It tracks mutability at runtime.
+
+. . .
+
+What is a `RefCell`?
+
+---
+
+A `RefCell` is similar to `Cell`, but enforces borrowing rules at runtime.
+
+> If you try to get both a mutable and immutable reference simultaneously, it will panic.
+
+. . .
+
+What is a `RwLock`?
+
+---
+
+"Reader-writer" lock.
+
+> It's a more flexible version of `Mutex`, allowing multiple readers at once, or a single writer.
 
 . . .
 
@@ -60,7 +90,22 @@ How do you create new threads in Rust?
 
 ---
 
-Use the `std::thread::spawn` function from the standard library.
+You use the `std::thread::spawn` function to create a new thread. You give it a closure (a function-like block of code) that defines the work the thread will do.
+
+```use std::thread;
+use std::time::Duration;
+
+fn main() {
+    let handle = thread::spawn(|| {
+        for i in 1..10 {
+            println!("hi from the spawned thread: {}", i);
+            thread::sleep(Duration::from_millis(500));
+        }
+    });
+
+    handle.join().unwrap(); // Wait for the thread to finish
+}
+```
 
 . . .
 
