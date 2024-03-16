@@ -89,4 +89,4 @@ Why are "shared" and "exclusive" more accurate terms than "immutable" and "mutab
 ---
 
 * **"Shared"** (`&T`) emphasises that multiple references to the same data can exist simultaneously.
-* **"Exclusive"** (`&mut T) highlights the guarantee that no other reference can access the data while the exclusive reference is in use, allowing modification.
+* **"Exclusive"** (`&mut T`) highlights the guarantee that no other reference can access the data while the exclusive reference is in use, allowing modification.
