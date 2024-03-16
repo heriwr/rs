@@ -13,8 +13,7 @@ How does a ```Mutex``` work?
 
 ---
 
-...
-...
+. . .
 
 Why use a ```Mutex```?
 
