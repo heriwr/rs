@@ -492,3 +492,137 @@ enum EnumName {
 * **Zero-Variant Enums:**  Special enums that can never be instantiated, similar to the `!` (never) type.
 
 </details>
+
+<details>
+    <summary>Unions</summary>
+
+# What are unions in Rust?
+
+* **Overlapping Data:** Unions let multiple fields share the same memory space, effectively letting you store different types of data in the same location.
+* **Type Safety Trade-off:**  You must manually track which field currently holds valid data to avoid errors.
+* **Specialized Uses:** 
+    * **FFI:**  Interfacing with C code that uses unions.
+    * **Extreme Optimizations:** Saving memory when only one field is relevant at a time.
+
+**Key Points:**
+
+* **Uncommon in typical Rust:** Unions sacrifice some safety for memory efficiency.
+* **`unsafe` code:**  Safe usage generally requires `unsafe` blocks. 
+
+# How do you define a union in Rust?
+
+```rust
+#[repr(C)] // May be needed for FFI 
+union MyUnion {
+    f1: u32,
+    f2: f32, 
+}
+```
+
+**Explanation:**
+
+* **`union` keyword:** Declares a new union type.
+* **`MyUnion`:**  Choose a descriptive name for your union.
+* **Fields:**
+    * Fields share the same memory.
+    * Types must be allowed in unions (e.g., `Copy`, references).
+* **`#[repr(C)]`:** 
+    *  Controls memory layout.
+    *  Often essential for compatibility with C code.
+
+**Important Notes:**
+
+* **Safety:** Unions require careful type tracking. Use with caution!
+* **Unsafe Code:** Accessing union fields usually involves `unsafe` blocks. 
+
+# Explain how to work with union values.
+
+* **Initialization:**  
+    * Set a value for only ONE field when creating a union:
+       ```rust
+       let mut u = MyUnion { f1: 10 }; 
+       ```
+
+* **Unsafe Access:**
+    * Use `unsafe` blocks when reading or writing union fields:
+       ```rust
+       unsafe {
+           u.f2 = 3.14;  // Writing to f2
+           let value = u.f1; // Reading from f1
+       }
+       ```
+    * **Responsibility:** It's your duty to ensure that you're interpreting the data with the correct type. Failure to do so leads to undefined behavior. 
+
+**Important Note:**
+
+* Unions in Rust often necessitate the use of `unsafe` code due to the potential for type misinterpretation. Exercise extreme caution! 
+
+# Describe how borrowing works with unions in Rust.
+
+**Back:**
+
+* **Strict Borrowing:** If you borrow one field of a union, all other fields are implicitly borrowed as well, preventing modification. This applies to both mutable and immutable borrows.
+
+* **Safety Ensured:** This rule is crucial for Rust's memory safety guarantees.  It prevents situations where you could modify data through one field while it's being used through another.
+
+**Example (Incorrect):**
+
+```rust
+let mut u = MyUnion { f1: 1 };
+unsafe {
+    let b1 = &mut u.f1; 
+    let b2 = &u.f2; // Error: Conflicting borrows
+}
+```
+
+**Important:** Unions often involve careful reasoning about lifetimes and borrows to avoid potential safety issues.
+
+# Key Considerations for Using Unions in Rust
+
+**Back:**
+
+* **Safety Trade-off:** Unions require careful management to avoid undefined behavior. `unsafe` code is often necessary.
+* **Type Constraints:**  Only specific types (`Copy`, references, etc.) are allowed in unions.  This is to prevent issues with types that have complex cleanup (destructors). 
+* **Safer Access:** Use pattern matching (`match` expressions) within `unsafe` blocks to extract union values based on their type safely.
+* **Specialized Use Cases:**
+    * **FFI:** Unions are essential when interacting with C code that uses union types.
+    * **Extreme Optimizations:** Unions can offer memory savings in rare cases where storing multiple data types in the same space is crucial.
+
+**Important:**
+
+* Prioritize standard Rust data structures (structs, enums) for most code. Unions are an advanced tool for specific scenarios! 
+
+Explain Pattern Matching with Unions
+
+**Concept:** Pattern matching lets you safely extract values from unions and check which field is currently active.  This must be done within `unsafe` blocks.
+
+**Example:**
+
+```rust
+#[repr(C)]
+union MaybeFloat {
+    i: i32,
+    f: f32,
+}
+
+let value = MaybeFloat { i: 5 };
+
+unsafe {
+    match value {
+        MaybeFloat { i } => println!("Got an integer: {}", i),
+        MaybeFloat { f } => println!("Got a float: {}", f),
+    }
+} 
+```
+
+**Key Points:**
+
+* **Exhaustive Matching:**  Ensure your `match` covers all possible union fields.
+* **Type Safety:** The compiler guarantees that you are handling the correct data type within each `match` arm.
+* **Field Bindings:** Use patterns (like `i` and `f` in the example) to bind values from the union fields. 
+
+**Why it Matters:**
+
+* **Safer than Direct Access:**  Pattern matching reduces the risk of misinterpreting union data compared to direct field reads.
+
+</details>
