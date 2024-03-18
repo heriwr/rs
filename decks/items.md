@@ -71,7 +71,42 @@ use order_management::take_order;
 use order_management::processing::validate_order;
 ```
 
-Absolutely! Here's a refined version of your flashcard, incorporating additional details about the module and type interaction in Rust:
+# How do you define modules in Rust?
+
+**Syntax:**
+
+```rust
+mod module_name {
+    // Optional inner attributes (e.g., #[cfg(test)], #[doc = "Module description"])
+    // Module items:
+    pub fn my_function() { ... }
+    pub struct MyStruct { ... }
+    mod nested_module { ... } 
+    // ... other items
+}
+```
+
+**Key Points:**
+
+* **`mod module_name;`**  Declares a module. The module's content will reside in a file named `module_name.rs` or a directory named `module_name/` containing a `mod.rs` file.
+* **Optional `unsafe`:** Use the `unsafe` keyword before `mod` if the module contains unsafe code blocks.
+* **Inner attributes:** Attributes placed inside the module apply to items within it.
+* **Visibility:** Items within a module are private by default. Use the `pub` keyword to make them accessible from outside the module.
+
+**Examples:**
+
+```rust
+// Simple module
+mod order_processing; 
+
+// Module with a function and nested module
+mod inventory {
+    #[cfg(test)] // Attribute applies to items within the module
+    pub fn stock_item() { ... } 
+
+    mod tracking { ... } 
+} 
+```
 
 # How do modules interact with types in Rust?
 
@@ -215,43 +250,6 @@ use authentication::login;
 fn main() {
     login("my_username", "my_password"); 
     // authentication::hash_password(); // Error: Not accessible
-} 
-```
-
-# How do you define modules in Rust?
-
-**Syntax:**
-
-```rust
-mod module_name {
-    // Optional inner attributes (e.g., #[cfg(test)], #[doc = "Module description"])
-    // Module items:
-    pub fn my_function() { ... }
-    pub struct MyStruct { ... }
-    mod nested_module { ... } 
-    // ... other items
-}
-```
-
-**Key Points:**
-
-* **`mod module_name;`**  Declares a module. The module's content will reside in a file named `module_name.rs` or a directory named `module_name/` containing a `mod.rs` file.
-* **Optional `unsafe`:** Use the `unsafe` keyword before `mod` if the module contains unsafe code blocks.
-* **Inner attributes:** Attributes placed inside the module apply to items within it.
-* **Visibility:** Items within a module are private by default. Use the `pub` keyword to make them accessible from outside the module.
-
-**Examples:**
-
-```rust
-// Simple module
-mod order_processing; 
-
-// Module with a function and nested module
-mod inventory {
-    #[cfg(test)] // Attribute applies to items within the module
-    pub fn stock_item() { ... } 
-
-    mod tracking { ... } 
 } 
 ```
 
