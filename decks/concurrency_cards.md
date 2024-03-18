@@ -1,5 +1,5 @@
 ---
-Flashcard Deck: Rust Concurrency
+Flashcard Deck: Rust Concurrency, Multithreading, Parallelism & Synchronisation
 ---
 
 ## What is a `Mutex` and why is it important?
