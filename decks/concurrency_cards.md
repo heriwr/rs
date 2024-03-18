@@ -713,3 +713,90 @@ The `Sync` trait marks types safe to share references to between threads (`&T`).
 * **Caution:** Types with interior mutability (`Cell`, `RefCell`) usually *aren't* `Sync`. 
 
 **Let me know if you'd like more advanced flashcards, or flashcards geared towards specific concurrency patterns!** 
+
+Absolutely! Here are some advanced flashcards on concurrency in Rust to challenge your understanding:
+
+**Flashcard 1**
+
+**Front**
+
+Explain the concept of *memory models* in concurrent programming and their implications in Rust.
+
+**Back**
+
+* **What is a memory model?**  A set of rules governing how threads interact with shared memory and the order in which memory operations become visible across threads.
+* **The problem:** CPUs and compilers can reorder instructions for optimization. This creates inconsistencies for concurrent programs that rely on strict ordering.
+* **Rust's memory model:**  Rust provides a formal memory model that balances predictability with performance. It relies on the concept of "happens-before" relationships between operations.
+* **Implications:**
+   * **Atomic operations:** They create synchronization points and establish happens-before relationships.
+   * **Memory orderings:** Control the strictness of guarantees when using atomics (see previous flashcards on orderings).
+   * **Data races:** Understanding the memory model is crucial to writing code that's free of data races.
+
+**Flashcard 2**
+
+**Front**
+
+What are the potential pitfalls of lock-based synchronization, and how can lock-free/wait-free techniques mitigate them?
+
+**Back**
+
+* **Pitfalls of lock-based synchronization**
+    * **Deadlocks:**  Threads can get stuck waiting for each other's locks in a circular dependency.
+    * **Livelocks:**  Threads are active, changing state, but not making progress due to constant contention on the lock.  
+    * **Priority inversion:**  A lower-priority thread holding a lock can prevent a higher-priority thread from running.
+    * **Performance overhead:** Acquiring and releasing locks, especially under contention, can slow execution.  
+
+* **Lock-free/wait-free techniques:**
+    * **Atomic operations:**  Using hardware-level compare-and-swap (CAS) instructions to update shared data without explicit locks. 
+    * **Carefully designed algorithms:** Ensure progress guarantees even without traditional locks.
+
+* **Benefits**
+    * **Avoid deadlocks/livelocks:**  By design (especially with wait-free algorithms).
+    * **Potential performance gains:**  Can outperform locking in highly contended scenarios.
+
+**Flashcard 3**
+
+**Front**
+
+Describe the ABA problem in lock-free programming, and discuss strategies to address it.
+
+**Back**
+
+* **The ABA Problem:**  In lock-free algorithms, consider this scenario:
+    1. Thread A reads value `A` from a shared location.
+    2. Thread A is interrupted.
+    3. Thread B changes the value to `B` and then back to `A`. 
+    4. Thread A resumes, sees the value `A` again, and wrongly assumes nothing has changed.
+
+* **Problems it causes:** Can lead to data corruption or inconsistent behavior in lock-free algorithms.
+
+* **Strategies**
+    * **Version numbers:** Associate a version counter with the shared data. Increment it on each modification.
+    * **Tagged pointers:**  If the architecture supports it, use an extra bit in a pointer to store a version number. 
+    * **Hazard pointers:** A technique to keep track of retired objects to avoid re-use.
+    * **Double-compare-and-swap (DCAS):** Extension of CAS, operating on two memory locations simultaneously.
+
+**Flashcard 4**
+
+**Front**
+
+How can you design effective thread pools in Rust? Consider factors like task scheduling, work stealing, and dynamic resizing.
+
+**Back**
+
+* **Key components:**
+    * **Work queue:** Stores tasks waiting to be executed. Consider using an `mpsc` channel or a lock-free queue.
+    * **Worker threads:** A pool of threads that fetch tasks from the work queue and execute them.
+
+* **Factors for effective design:**
+    * **Task scheduling:**
+         * FIFO (First-In, First-Out) for basic fairness.
+         * Priority queues for tasks with different importance levels.
+    * **Work stealing:** If a worker thread becomes idle, it can "steal" tasks from other workers' queues to improve load balancing.
+    * **Dynamic resizing:** 
+        *  Grow the pool if there's high demand.
+        *  Shrink the pool to release resources when idle, avoiding unnecessary threads. 
+
+**Code Example (Basic):** [invalid URL removed]
+
+**Let me know if you'd like flashcards on specific synchronization patterns or even more esoteric concurrency topics!** 
