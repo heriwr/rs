@@ -365,3 +365,73 @@ type ResultVec<T> = Vec<Result<T, Error>>; // Generic alias
 * **`where` Clauses:** For clarity and consistency, prefer placing `where` clauses _after_ the equals sign in type alias declarations.
 
 </details>
+
+<details>
+    <summary>Structs</summary>
+
+# What are structs in Rust?
+
+* **Custom Data Structures:** Structs let you define new data types that combine multiple values of different types into a single, organized unit.
+
+* **Real-World Modeling:** Use structs to represent concepts in your program's domain (e.g., `Customer`, `SensorReading`, `GameState`).
+
+* **Code Readability:** Structs improve code clarity by associating descriptive names with the data they hold. 
+
+# Describe the different ways to define structs in Rust.
+
+* **Named-Field Struct:**  
+    * Fields have descriptive names.
+    * Improves readability and self-documentation.
+    * Example:
+       ```rust
+       struct Point {
+           x: i32,
+           y: i32, 
+       }
+       ```
+* **Tuple Struct:** 
+    * Fields are unnamed, accessed by their index (position).
+    * Useful for compact data representation or when field names aren't crucial.
+    * Example:
+        ```rust
+        struct Color(u8, u8, u8); // RGB color
+        ```
+* **Unit-like Struct:**
+    * No fields.
+    * Often used as markers for traits or to create newtype patterns.
+    * Example:
+        ```rust
+        struct FileOpenEvent; 
+        ```
+
+# How do you define a named-field struct in Rust?
+
+```rust
+struct StructName {
+    field1: Type1,
+    field2: Type2,
+    // ... additional fields
+}
+```
+
+* **`struct`:** Keyword for defining structs.
+* **`StructName`:**  Choose a descriptive name (e.g., `Product`, `Rectangle`).
+* **`field_name: Type`:**  Each field requires a name and type declaration.
+
+# Demonstrate how to create and work with struct instances.
+
+**Instantiation:**
+```rust
+let book = Book {
+    title: "The Lord of the Rings".to_string(), 
+    author: "J.R.R. Tolkien".to_string(),
+    pages: 1200,
+};
+```
+
+**Accessing Fields:**
+```rust
+println!("Author: {}", book.author); 
+```
+
+</details>
