@@ -1,3 +1,6 @@
+<details>
+    <summary>Modules</summary>
+
 # Explain how Rust modules control code organization and visibility.
 
 - **Rust modules:** Group code (functions, structs, etc.) into logical units for better organization.
@@ -15,6 +18,8 @@ mod authentication {
 // In another file
 use authentication::login; 
 ```
+
+</details>
 
 # How can I shorten long paths when referring to items in Rust code?
     
