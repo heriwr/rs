@@ -1,24 +1,6 @@
 <details>
     <summary>Modules</summary>
 
-# Explain how Rust modules control code organization and visibility.
-
-- **Rust modules:** Group code (functions, structs, etc.) into logical units for better organization.
-- **Visibility control:** Items inside a module are private by default. Use `pub` to make them accessible in other parts of the program (`pub fn`, `pub struct`).
-
-Code Example:
-
-```
-mod authentication { 
-    pub fn login(username: &str, password: &str) -> bool { 
-        // ...
-    }
-}
-
-// In another file
-use authentication::login; 
-```
-
 # What is a module?
 A container for zero or more items, organizing code and potentially creating namespaces. Modules can nest arbitrarily.
 
@@ -64,6 +46,23 @@ Back:
 * `path` (covered earlier)
 * `no_implicit_prelude` (disables automatic use std::prelude::v1::*;)
 
+# Explain how Rust modules control code organization and visibility.
+
+- **Rust modules:** Group code (functions, structs, etc.) into logical units for better organization.
+- **Visibility control:** Items inside a module are private by default. Use `pub` to make them accessible in other parts of the program (`pub fn`, `pub struct`).
+
+Code Example:
+
+```
+mod authentication { 
+    pub fn login(username: &str, password: &str) -> bool { 
+        // ...
+    }
+}
+
+// In another file
+use authentication::login; 
+```
 
 </details>
 
