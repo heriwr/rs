@@ -19,6 +19,52 @@ mod authentication {
 use authentication::login; 
 ```
 
+# What is a module?
+A container for zero or more items, organizing code and potentially creating namespaces. Modules can nest arbitrarily.
+
+# What is a module item?
+A named module, surrounded by braces and prefixed with the mod keyword. Introduces a new module into the crate structure.
+
+# How do modules interact with types?
+Modules and types exist within the same namespace. You cannot declare a type (struct, enum, etc.) with the same name as an existing module in the same scope (and vice-versa).
+
+# Can you use the unsafe keyword before the mod keyword?
+Syntactically allowed, but semantically rejected. This is primarily to enable macros to manipulate syntax involving the unsafe keyword in relation to modules.
+
+# How does Rust determine module filenames?
+Module name mirrors the file name (plus ".rs" extension).
+Module path mirrors directory structure.
+## Example
+```
+crate::util::config would likely be found in util/config.rs
+```
+
+# Describe the alternate way to define a module's content.
+Place module contents in a file named "mod.rs" within a directory named after the module.
+Example: 
+```
+crate::util content could be in util/mod.rs.
+```
+
+> Can't mix this with a regular .rs file for the same module.
+
+# Why is the path attribute used on modules?
+To customize the file path used to load the module's contents, overriding default filename conventions.
+
+# How does the path attribute's behavior change when used within inline modules?
+mod-rs files: Paths are relative to the directory containing the mod-rs file.
+non-mod-rs files: Paths are relative, starting with a directory named after the containing non-mod-rs file.
+
+# Which built-in attributes are meaningful for modules?
+Back:
+* `cfg` (conditional compilation)
+* `deprecated`
+* `doc` (documentation comments)
+* `lint` check attributes (like allow, warn, etc.)
+* `path` (covered earlier)
+* `no_implicit_prelude` (disables automatic use std::prelude::v1::*;)
+
+
 </details>
 
 <details>
