@@ -242,3 +242,67 @@ mod foo {
 
 </details>
 
+<details>
+    <summary>Functions</summary>
+
+# Describe the fundamental structure of a Rust function.
+
+* **Keyword:** Functions are defined using the `fn` keyword.
+* **Name:** A function must have a descriptive name.
+* **Parameters (Optional):** Enclosed in parentheses `()`, parameters define the data the function accepts.
+* **Return Type (Optional):** Indicated with `-> Type`, specifies the type of value the function returns. If none, it defaults to the unit type `()`.
+* **Body:** Enclosed in curly braces `{}`, contains the code that the function executes.
+
+**Example:**
+```rust
+fn multiply(x: i32, y: i32) -> i32 {
+    x * y
+}
+```
+
+# How do you define parameters in Rust functions?
+
+* **Within parentheses:** Parameters are listed within `()` after the function name.
+* **Patterns:** Function parameters act as irrefutable patterns  (like in a `let` binding), allowing for destructuring of arguments.
+* **Self Parameter:** A special `self` parameter (e.g., `&self`) indicates that the function is a method.
+* **Variadic Parameters:** The  `...` token denotes a variadic function, accepting multiple arguments of a single type (must be the last parameter).
+
+**Example:**
+```rust
+fn take_ownership((name: String, age: i32)) { ... } 
+fn is_admin(&self) -> bool { ... }         
+fn print_args(args: ...) { ... } 
+```
+
+# Explain the concept of generic functions in Rust.
+
+* **Type Parameters:** Generic functions introduce type parameters within angle brackets `< >` after the function name, making them adaptable to different data types.
+* **Trait Bounds:** Use the `where` clause to constrain type parameters by requiring them to implement specific traits.
+* **Type Inference:** Rust often infers types when generic functions are used, eliminating the need to explicitly specify them.
+
+**Example:**
+```rust
+fn find_max<T: PartialOrd>(list: &[T]) -> &T { ... } 
+```
+
+# What are 'extern' functions and 'const' functions in Rust?
+
+* **`extern` Functions:** 
+    * Define a function interface callable with a specific foreign function interface (ABI).
+    * Often used to interact with code written in other languages (e.g., C).
+
+* **`const` Functions:**
+    * Can be called within constant contexts (e.g., creating constant values).
+    * Have certain restrictions on their implementation.
+
+# Describe 'async' functions in Rust.
+
+**Back:**
+
+* **Asynchronous Programming:** `async` functions enable asynchronous programming, returning a `Future` that represents the ongoing computation.
+* **No Immediate Work:** Calling an `async` function doesn't do work; it captures arguments into the future.
+* **Await:** The future is polled with `.await` to execute the function's body.
+
+**Note:** To combine `async` and `unsafe`, the behaviour changes subtly (See the original documentation for details). 
+
+</details>
