@@ -607,3 +607,109 @@ for _ in 0..10 {
     * **No Deadlocks/Livelocks:** Guarantees progress by design (wait-free being the stronger guarantee).
 * **The Catch:**
     * **Complexity:** Significantly harder to design and reason about compared to lock-based approaches.
+
+Absolutely! Here's a set of flashcards on concurrency in Rust, going beyond the topics you've already covered. 
+
+**Remember to tailor these to your specific learning goals and level of understanding.**
+
+**Flashcard 1**
+
+**Front**
+
+What are the primary use cases for atomic types in Rust?
+
+**Back**
+
+* **Synchronization:** Used to safely share simple data types (e.g., counters) across threads without the overhead of Mutexes.
+* **Building blocks:** Provide the foundation for creating more complex concurrent data structures and synchronization primitives. 
+* **Hardware interaction:** Interacting with memory-mapped hardware registers where order of operations is critical.
+
+**Key Atomic Types:**
+
+* **AtomicBool:** For thread-safe boolean values
+* **AtomicIsize/AtomicUsize:**  For integers (signed/unsigned)
+* **AtomicPtr:** For raw pointers
+
+**Example**
+
+```rust
+use std::sync::atomic::{AtomicUsize, Ordering};
+
+let counter = AtomicUsize::new(0);
+
+counter.fetch_add(5, Ordering::SeqCst); // Atomically add 5
+println!("Counter: {}", counter.load(Ordering::Relaxed));
+```
+
+**Flashcard 2**
+
+**Front**
+
+Explain the different memory orderings available in Rust's atomic operations.
+
+**Back**
+
+Memory orderings determine the level of synchronization guarantees provided when working with atomics. Think of them as 'strictness levels.' Here are the most common:
+
+* **Relaxed:**  Weakest ordering. Only guarantees atomicity of the operation.
+* **Acquire:** When reading (`load`), creates a "happens-before" relationship with writes using `Release`.
+* **Release:** When writing (`store`), creates a "happens-before" relationship with reads using `Acquire`. 
+* **AcqRel:** Combines `Acquire` and `Release` ordering for both read and write operations.
+* SeqCst`  (Sequential Consistency): Strongest ordering. Enforces global ordering of operations across all threads.
+
+**Choosing Orderings:** Use the weakest ordering that provides the necessary safety for your scenario. Strong orderings have performance overhead.
+
+**Flashcard 3**
+
+**Front**
+
+When would you use channels for communication between threads in Rust, as opposed to Mutex or atomics?
+
+**Back**
+
+Channels (especially `mpsc`) excel when:
+
+* **Complex data:** You need to send structured messages, not just simple atomic values.
+* **Producer-Consumer:** You have designated threads generating data and others processing it.
+* **Ordered communication:** The order in which messages are sent and received needs to be preserved.
+
+**Think of channels as conveyor belts:**
+
+* Multiple producers can add items to the belt.
+* A single consumer takes items off the belt in the order they were put on.
+
+**Flashcard 4**
+
+**Front**
+
+What is the `Send` trait in Rust, and why is it relevant for concurrency?
+
+**Back**
+
+The `Send` trait marks types as safe to transfer ownership between threads.
+
+**Key Points:**
+
+* **Compiler-enforced:** Prevents accidental data races – the compiler won't let you send non-`Send` data.
+* **Composability:** Types composed entirely of  `Send` types are usually automatically `Send`.
+* **Common `Send` types:** Most primitive types, smart pointers like `Arc`.
+* **Caution:** Types using raw pointers or non-thread-safe interiors are usually *not* `Send`.
+
+**Flashcard 5**
+
+**Front**
+
+What is the `Sync` trait in Rust, and why is it relevant for concurrency?
+
+**Back**
+
+The `Sync` trait marks types safe to share references to between threads (`&T`).
+
+**Key Points**
+
+* **Guarantees:** Promises that sharing a reference won't cause data races.
+* **Automatic inference:**  Types made up of entirely of `Sync` types typically are also `Sync`.
+* **Examples of `Sync` types:** Primitives, `Arc`, `Mutex`.
+* **Caution:** Types with interior mutability (`Cell`, `RefCell`) usually *aren't* `Sync`. 
+
+**Let me know if you'd like more advanced flashcards, or flashcards geared towards specific concurrency patterns!** 
