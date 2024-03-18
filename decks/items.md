@@ -64,6 +64,33 @@ mod authentication {
 use authentication::login; 
 ```
 
+# Describe the syntax for defining modules in Rust.
+
+* **Basic Module:**
+    ```
+    unsafe? mod IDENTIFIER; 
+    ```
+   * `unsafe?`: Optional. Marks module as allowing unsafe code blocks within.
+   * `IDENTIFIER`: The name of your module.
+
+* **Module with Body:**
+    ```
+    unsafe? mod IDENTIFIER {
+        InnerAttribute*  // Optional inner attributes
+        Item*            // Zero or more module items (functions, structs, etc.)
+    }
+    ```
+
+**Explanation:**
+
+* Modules provide organization and namespaces.
+* The body (within curly braces) is for defining items contained within the module.
+* `unsafe?` is only necessary if the module will contain `unsafe` blocks.
+* `InnerAttribute*` - Modules can have inner attributes like `#[cfg(test)]` for conditional compilation.
+
+**Let me know if you want flashcards on specific module items or the concept of  'unsafe' code!** 
+
+
 </details>
 
 <details>
