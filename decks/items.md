@@ -1,86 +1,21 @@
 <details>
     <summary>Modules</summary>
 
-# What is a module in Rust?
+# What is module in Rust and how do you define one?
 
-* **A container for organizing code:** Modules group related functions, structs, enums, traits, constants, and even other modules. This improves code readability, maintainability, and reusability. 
-* **A namespace mechanism:** Modules help prevent naming collisions by allowing items with the same name to exist in different modules.
-* **A means of controlling privacy:** Items inside a module are private by default. The `pub` keyword designates items, or parts of items, as publicly accessible from outside the module. 
-* **Hierarchical structure:** Modules can nest arbitrarily, creating complex organizational structures.
+* **Organizational Units:** Modules logically group related code (functions, structs, enums, traits, constants, and even other modules) enhancing readability, maintainability, and reusability.
+* **Namespaces:** Modules prevent naming conflicts, allowing the use of identical identifiers in different parts of your project.
+* **Privacy Control:** Items within a module are private by default. The `pub` keyword designates items (or parts of items) as publicly accessible.
+* **Hierarchical Structures:** Modules can nest arbitrarily, enabling the creation of complex project structures.
 
-**Example:**
-
-```rust
-mod restaurant { 
-    pub struct Order {
-        items: Vec<String>,
-        table_number: i32,
-    }
-
-    fn take_order() {
-        // ...
-    }
-
-    mod kitchen { 
-        fn prepare_food() {
-            // ...
-        }
-    }
-}
-```
-
-**Key points to remember:**
-
-* Modules are defined using the `mod` keyword.
-* The visibility of items within a module is controlled by the `pub` keyword.
-* Modules create a structured way to manage a Rust project's codebase.
-
-Here's a more comprehensive version of your flashcard, emphasizing the key points about module items in Rust:
-
-# What is a module item in Rust?
-
-* **The basic building block of a module:** A module item defines a new module within your Rust crate's organizational structure.
-* **Syntax:**
-   ```rust
-   mod module_name {
-       // Items (functions, structs, enums, etc.) and nested modules go here
-   }
-   ```
-* **Introduces a namespace:** The `module_name` creates a namespace, allowing you to have items with the same identifier in different parts of your code.
-* **Can contain other items:**  Module items hold various Rust items like:
-    * Functions (`fn`)
-    * Structs (`struct`)
-    * Enums (`enum`)
-    * Constants (`const` / `static`)
-    * Traits (`trait`)
-    * Other module items (nested modules)
-
-**Example:**
-
-```rust
-mod order_management {
-    pub fn take_order() { ... }
-
-    mod processing {
-        fn validate_order() { ... }
-    }
-}
-
-// Accessing items:
-use order_management::take_order; 
-use order_management::processing::validate_order;
-```
-
-# How do you define modules in Rust?
-
-**Syntax:**
+**Defining Modules: Syntax**
 
 ```rust
 mod module_name {
-    // Optional inner attributes (e.g., #[cfg(test)], #[doc = "Module description"])
+    // Optional inner attributes (e.g., #[cfg(test)], #[doc = "Description"])
     // Module items:
-    pub fn my_function() { ... }
-    pub struct MyStruct { ... }
+    pub fn my_function() { ... } 
+    pub struct MyStruct { ... } 
     mod nested_module { ... } 
     // ... other items
 }
@@ -88,24 +23,22 @@ mod module_name {
 
 **Key Points:**
 
-* **`mod module_name;`**  Declares a module. The module's content will reside in a file named `module_name.rs` or a directory named `module_name/` containing a `mod.rs` file.
-* **Optional `unsafe`:** Use the `unsafe` keyword before `mod` if the module contains unsafe code blocks.
-* **Inner attributes:** Attributes placed inside the module apply to items within it.
-* **Visibility:** Items within a module are private by default. Use the `pub` keyword to make them accessible from outside the module.
+* **`mod` keyword:** Declares a module.
+* **Visibility:** Items are private unless marked with `pub`.
+* **File/Directory Mapping:**  Module content resides in `module_name.rs` or a directory named `module_name/` with a `mod.rs` file.
+* **`unsafe` (optional):**  Use before `mod` for modules containing `unsafe` blocks. 
 
-**Examples:**
+**Example:**
 
 ```rust
-// Simple module
-mod order_processing; 
+mod restaurant { 
+    pub struct Order { ... }
+    fn take_order() { ... }
 
-// Module with a function and nested module
-mod inventory {
-    #[cfg(test)] // Attribute applies to items within the module
-    pub fn stock_item() { ... } 
-
-    mod tracking { ... } 
-} 
+    mod kitchen { 
+        fn prepare_food() { ... } 
+    }
+}
 ```
 
 # How do modules interact with types in Rust?
