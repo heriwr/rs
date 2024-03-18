@@ -309,3 +309,59 @@ fn find_largest<T: PartialOrd>(list: &[T]) -> &T { ... }
 **Note:** Combining `async` and `unsafe` requires careful attention to ensure soundness. 
 
 </details>
+
+<details>
+    <summary>Type Aliases</summary>
+
+# What are type aliases in Rust, and why are they useful?
+
+* **Naming Shortcuts:** Type aliases provide alternative names for existing types. This can significantly enhance code readability and maintainability.
+
+**Key Uses:**
+
+* **Readability:** Replace long, complex type descriptions with meaningful identifiers.
+    *  Example: `type AccountNumber = u64;`
+* **Abstraction:**  Decouple code from specific type implementations, allowing for future changes without widespread refactoring.
+    * Example: `type DatabaseResult = Result<Data, Error>;`   
+* **Conciseness:** Make type signatures in function definitions and variable declarations cleaner.
+
+# Describe the syntax for creating a type alias in Rust.
+
+```rust
+type AliasName<GenericParams?> = ExistingType;
+```
+
+**Explanation:**
+
+* **`type`:**  The keyword that signals a type alias declaration.
+* **`AliasName`:**  Provide a descriptive name for the type alias.
+* **`<GenericParams?>`:**  Optional for generic type aliases that work with various concrete types.
+* **`ExistingType`:** The type you want to assign an alternative name to.
+
+**Examples:**
+
+```rust
+type Millimeters = u32;        // Simple alias
+type ResultVec<T> = Vec<Result<T, Error>>; // Generic alias
+```
+
+# What are the important things to remember when using type aliases?
+
+* **Semantic Equivalence:** A type alias is just a different name for the same underlying type; it does not create a new, distinct type.
+* **Constructor Restrictions:** You cannot directly use a type alias to call the constructor of its underlying type.
+
+    * Example:  
+       ```rust
+       struct Point(i32, i32); 
+       type Coordinate = Point; 
+
+       // Valid:
+       let point = Point(5, 10);   
+
+       // Invalid: 
+       let coordinate = Coordinate(5, 10); 
+       ```
+
+* **`where` Clauses:** For clarity and consistency, prefer placing `where` clauses _after_ the equals sign in type alias declarations.
+
+</details>
