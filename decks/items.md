@@ -435,3 +435,60 @@ println!("Author: {}", book.author);
 ```
 
 </details>
+
+<details>
+    <summary>Enums</summary>
+    
+# What are enumerations (enums) in Rust?
+
+* **Custom Types with Limited Choices:** Enums define new types where values must be one of the predefined variants.
+* **Code Clarity:** Enums make code more self-documenting by giving meaningful names to possible states or options.
+* **Type Safety:** The compiler enforces that an enum variable can only ever hold one of its valid variants.
+
+**Example:**
+```rust
+enum FileState {
+    Open,
+    Closed,
+    ReadError, 
+}
+```
+
+# How do you define an enum in Rust?
+
+```rust
+enum EnumName {
+    Variant1,
+    Variant2(Type1, Type2), // Tuple-like variant
+    Variant3 { field1: Type1, field2: Type2 }, // Struct-like variant
+}
+```
+
+* **`enum`:** The keyword to declare an enum.
+* **`EnumName`:** Provide a descriptive name (e.g., `TrafficLightColor`).
+* **Variants:** List the possible values, each with an optional data structure.
+
+# Explain the types of enum variants with examples.
+
+* **Unit-like:** No data. Represents a simple state.
+    *  `enum DayOfWeek { Monday, Tuesday, ... }`
+
+* **Tuple-like:** Holds unnamed data (accessed by position).
+    * `enum HttpStatus { Ok(u16), NotFound(String) }`
+
+* **Struct-like:** Holds named fields.
+   *  `enum Event { KeyPress { key: char, shift_held: bool } }`
+
+# What are discriminants in Rust enums?
+
+* **Internal IDs:** Each enum variant gets a unique integer value (the discriminant) used by the compiler.
+* **Pattern Matching:**  Discriminants power Rust's `match` expressions for choosing code branches based on enum values.
+* **Usually Hidden:**  Most of the time, you work with enum variants directly, not the discriminants themselves.
+
+# Touch upon additional powerful enum features in Rust.
+
+* **Explicit Discriminants:** Manually assign numbers to variants for control (e.g.,  `enum Number { One = 1, Two, Three }`).
+* **`#[repr]` Attribute:** Customize an enum's memory layout for optimizations or interoperability.
+* **Zero-Variant Enums:**  Special enums that can never be instantiated, similar to the `!` (never) type.
+
+</details>
