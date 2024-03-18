@@ -21,6 +21,9 @@ use authentication::login;
 
 </details>
 
+<details>
+    <summary>Use Statements</summary>
+
 # How can I shorten long paths when referring to items in Rust code?
     
  Use the `use` declaration to create aliases or bring items directly into scope.
@@ -42,4 +45,5 @@ use authentication::login;
     - **Namespace:** `use std::io::*` (brings all items from `std::io` into scope)
     - **Nested:** `use std::collections::{HashMap, BTreeSet};`
 
+</details>
 
