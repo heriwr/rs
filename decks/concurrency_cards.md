@@ -800,3 +800,115 @@ How can you design effective thread pools in Rust? Consider factors like task sc
 **Code Example (Basic):** [invalid URL removed]
 
 **Let me know if you'd like flashcards on specific synchronization patterns or even more esoteric concurrency topics!** 
+
+Absolutely! Here are some flashcards focused on specific synchronization patterns in Rust:
+
+**Flashcard 1**
+
+**Front**
+
+Describe the Reader-Writer lock pattern (RwLock) and explain its use cases.
+
+**Back**
+
+* **The pattern:**  A Reader-Writer lock (RwLock) allows for more granular concurrency control than a simple Mutex.  
+    * **Multiple readers:** Can simultaneously access the shared data for read-only operations.
+    * **Exclusive writer:**  Only one thread can acquire the lock for writing, ensuring data consistency during modifications.
+
+* **Use cases:**
+    * **Data that's read frequently but written infrequently:** 
+        * Caches
+        * Configuration settings
+    * **Scenarios where reads vastly outnumber writes:** Improves read performance.
+
+* **Example (Rust's standard library):**
+
+```rust
+use std::sync::RwLock;
+use std::thread;
+
+let data = RwLock::new(0);
+
+// Multiple readers 
+for _ in 0..5 {
+    thread::spawn(move || loop { 
+        let value = data.read().unwrap();
+        println!("Reader thread: {}", value);
+    });
+}
+
+// Writer thread
+thread::spawn(move || loop {
+    let mut value = data.write().unwrap();
+    *value += 1;
+    println!("Writer thread: incremented");
+});
+```
+
+**Flashcard 2**
+
+**Front**
+
+What is the Barrier pattern in concurrent programming, and how might you implement it in Rust?
+
+**Back**
+
+* **The pattern:** A barrier is a synchronization point where a group of threads must all arrive before any of them can proceed. Think of a starting line at a race.
+
+* **Use cases:**
+    * **Phases in computation:** Tasks can divide work into phases, ensuring all threads finish a phase before the next starts.
+    * **Parallel simulations:**  When actions need to be synchronized in steps.
+
+* **Implementation in Rust:**
+    * **Using `std::sync::Barrier`:**  
+        * Create a `Barrier` with the count of threads.  
+        * Each thread calls `barrier.wait()`.  
+        * Once the count reaches zero, all threads are released.
+
+**Flashcard 3**
+
+**Front**
+
+Explain the concept of a *future* in concurrent Rust, and how it relates to asynchronous programming.
+
+**Back**
+
+* **What is a future?** A future represents the eventual result of an asynchronous computation. Think of it as a placeholder that will be filled in with the result (or an error) when the computation completes.
+
+* **How it relates to asynchronous programming:**
+    * **Non-blocking operations:** Futures let you start a computation without immediately blocking the current thread waiting for it to finish.
+    * **Composing asynchronous tasks:** Futures can be chained together using combinators (`.then()`, `.await`, etc.) to create complex asynchronous workflows.
+
+* **Example Libraries:**
+    * **`std::future`:** Provides the basic `Future` trait
+    * **Tokio:**  Popular async runtime and ecosystem for building network applications.
+    * **async-std:** Another popular async runtime. 
+
+**Flashcard 4**
+
+**Front**
+
+Describe the differences and use cases for the `crossbeam::channel` and `std::sync::mpsc` channel implementations in Rust.
+
+**Back**
+
+Both provide ways for threads to communicate, but with key differences:
+
+**`std::sync::mpsc`**
+
+* **Strict FIFO:** Messages are received in the exact order they were sent.
+* **Bounded or unbounded:** Can be configured with or without a capacity limit.
+* **Built-in:** Part of the standard library, always available.
+
+**`crossbeam::channel`**
+
+* **More options:** Provides bounded, unbounded, and rendezvous (zero-capacity) channels. 
+* **Potential performance edge:** Designed for high-performance scenarios. Can be slightly faster in some cases. 
+* **External crate:** Requires adding the `crossbeam` dependency.
+
+**When to choose which:**
+
+* **`mpsc`:** Great default choice – simple and versatile
+* **`crossbeam`:** If you prioritize maximum performance or need specialized channel types (like rendezvous).
+
+**Let me know if you would like more flashcards on other synchronization patterns or concepts like asynchronous programming with Tokio or async-std!**
